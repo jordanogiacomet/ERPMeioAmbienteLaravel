@@ -2,7 +2,7 @@
 
 namespace App\DTOs;
 
-class CreateClienteDTO 
+class CreateClienteDTO
 {
     public string $nome;
     public string $cnpj;
