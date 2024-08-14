@@ -68,7 +68,7 @@ class ClienteService
     /**
      * deleteCliente
      *
-     * @param  int $id
+     * @param int $id
      * @return void
      */
     public function deleteCliente(int $id): void 
