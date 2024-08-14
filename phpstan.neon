@@ -3,3 +3,7 @@ parameters:
     paths:
         - app
         - routes
+    checkMissingVarTagTypehint: true
+    checkMissingIterableValueType: true
+    checkUnionTypes: true
+    checkExplicitMixed: true

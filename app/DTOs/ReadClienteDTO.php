@@ -2,7 +2,7 @@
 
 namespace App\DTOs;
 
-class UpdateClienteDTO
+class ReadClienteDTO
 {
     public int $id;
     public ?string $nome;
