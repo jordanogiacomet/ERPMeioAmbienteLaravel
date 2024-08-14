@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Helpers\ClienteRepositoryExceptionHelpers;
 use App\Models\Cliente;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,7 +16,9 @@ class ClienteRepository implements ClienteRepositoryInterface
      */
     public function all(): Collection
     {
-        return Cliente::all();
+        return ClienteRepositoryExceptionHelpers::handleNotFound(function () {
+            return Cliente::all();
+        }); 
     }
 
     /**
