@@ -12,7 +12,7 @@ class ClienteRepositoryExceptionHelpers extends ExceptionHelper{
      * handleNotFound
      *
      * @param  callable $function
-     * @return void
+     * @return callable Exception
      */
     public static function handleNotFound(callable $function): callable
     {
@@ -22,7 +22,7 @@ class ClienteRepositoryExceptionHelpers extends ExceptionHelper{
      * handleCreate
      *
      * @param  callable $function
-     * @return void
+     * @return callable Exception
      */
     public static function handleCreate(callable $function)
     {
@@ -32,7 +32,7 @@ class ClienteRepositoryExceptionHelpers extends ExceptionHelper{
      * handleUpdate
      *
      * @param  callable $function
-     * @return void
+     * @return callable Exception
      */
     public static function handleUpdate(callable $function)
     {
@@ -42,7 +42,7 @@ class ClienteRepositoryExceptionHelpers extends ExceptionHelper{
      * handleDelete
      *
      * @param  callable $function
-     * @return void
+     * @return callable Exception
      */
     public static function handleDelete(callable $function)
     {

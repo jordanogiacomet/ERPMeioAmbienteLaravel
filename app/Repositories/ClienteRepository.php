@@ -6,70 +6,77 @@ use App\Helpers\ClienteRepositoryExceptionHelpers;
 use App\Models\Cliente;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ClienteRepository implements ClienteRepositoryInterface
 {
     /**
      * all
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
+     * th
      */
     public function all(): Collection
     {
         return ClienteRepositoryExceptionHelpers::handleNotFound(function () {
             return Cliente::all();
-        }); 
+        })();
     }
 
     /**
      * find
      *
-     * @param  int $id
+     * @param  int|string $id
      * @return Cliente
      */
-    public function find(int $id): Cliente
+    public function find(int|string $id): Cliente
     {
-        $cliente = Cliente::find($id);
-        if (!$cliente) {
-            throw new ModelNotFoundException("Cliente não encontrado.");
-        }
-        return $cliente;
+        return ClienteRepositoryExceptionHelpers::handleNotFound(function () use ($id) {
+            return Cliente::findOrFail($id);
+        })();
     }
 
     /**
      * create
      *
-     * @param  array $data
+     * @param  FormRequest $data
      * @return Cliente
      */
-    public function create(array $data): Cliente
+    public function create(FormRequest $data): Cliente
     {
-        return Cliente::create($data);
+        return ClienteRepositoryExceptionHelpers::handleCreate(function () use ($data) {
+            return Cliente::create($data->validated());
+        })();
     }
 
     /**
      * update
      *
-     * @param  int $id
-     * @param  array $data
+     * @param  int|string $id
+     * @param  FormRequest $data
      * @return Cliente
      */
-    public function update(int $id, array $data): Cliente
-    {
+    public function update(int|string $id, FormRequest $data): Cliente
+    {   
+
         $cliente = $this->find($id);
-        $cliente->update($data);
-        return $cliente;
+        return ClienteRepositoryExceptionHelpers::handleUpdate(function () use ($cliente, $data) {
+            $cliente->update($data->validated());
+            return $cliente;
+        })();
     }
-    
+
     /**
      * delete
      *
-     * @param  int $id
+     * @param  int|string $id
      * @return void
      */
-    public function delete(int $id): void
+    public function delete(int|string $id): void
     {
         $cliente = $this->find($id);
-        $cliente->delete();
+        return ClienteRepositoryExceptionHelpers::handleDelete(function () use ($cliente) {
+            $cliente->delete();  
+        })();
     }
 }
