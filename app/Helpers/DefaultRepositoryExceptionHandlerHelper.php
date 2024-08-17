@@ -7,7 +7,8 @@ use App\Exceptions\CreateException;
 use App\Exceptions\UpdateException;
 use App\Exceptions\DeleteException;
 
-class RepositoryExceptionHelpers extends ExceptionHelper{    
+class DefaultRepositoryExceptionHandlerHelper extends DefaultRepositoryExceptionHelper
+{
     /**
      * handleNotFound
      *
@@ -17,7 +18,7 @@ class RepositoryExceptionHelpers extends ExceptionHelper{
     public static function handleNotFound(callable $function): callable
     {
         return self::handleException($function, NotFoundException::class);
-    }    
+    }
     /**
      * handleCreate
      *
@@ -27,7 +28,7 @@ class RepositoryExceptionHelpers extends ExceptionHelper{
     public static function handleCreate(callable $function)
     {
         return self::handleException($function, CreateException::class);
-    }    
+    }
     /**
      * handleUpdate
      *
@@ -37,7 +38,7 @@ class RepositoryExceptionHelpers extends ExceptionHelper{
     public static function handleUpdate(callable $function)
     {
         return self::handleException($function, UpdateException::class);
-    }    
+    }
     /**
      * handleDelete
      *

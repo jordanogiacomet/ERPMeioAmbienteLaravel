@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Exceptions\NotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Repositories\ClienteRepository;
@@ -44,34 +44,34 @@ class ClienteRepositoryTest extends TestCase
 
     public function test_find_cliente_throws_exception_if_not_found()
     {
-        $this->expectException(ModelNotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $this->clienteRepository->find(999); // ID que não existe
     }
-
     public function test_can_update_cliente_by_id()
-    {
-        $cliente = Cliente::factory()->create();
-        $data = [
-            'nome' => 'Cliente Atualizado'
-        ];
-        $updatedCliente = $this->clienteRepository->update($cliente->id, new \Illuminate\Foundation\Http\FormRequest($data));
-        $this->assertEquals('Cliente Atualizado', $updatedCliente->nome);
-    }
+{
+    $cliente = Cliente::factory()->create();
+    $request = new \UpdateClienteRequest();
+    $request->merge([
+        'nome' => 'Cliente Atualizado'
+    ]);
 
+    $updatedCliente = $this->clienteRepository->update($cliente->id, $request);
+    $this->assertEquals('Cliente Atualizado', $updatedCliente->nome);
+}
     public function test_can_delete_cliente()
     {
         $cliente = Cliente::factory()->create();
 
         $this->clienteRepository->delete($cliente->id);
 
-        $this->expectException(ModelNotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $this->clienteRepository->find($cliente->id);
     }
 
     public function test_delete_cliente_throws_exception_if_not_found()
     {
-        $this->expectException(ModelNotFoundException::class);
-        $this->clienteRepository->delete(999); // ID que não existe
+        $this->expectException(NotFoundException::class);
+        $this->clienteRepository->delete(999); 
     }
 
     public function test_can_get_all_clientes()

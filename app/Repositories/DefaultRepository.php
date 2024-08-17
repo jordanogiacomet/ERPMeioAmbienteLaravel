@@ -5,7 +5,7 @@ namespace App\Repositories;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
-use App\Helpers\DefaultRepositoryExceptionHelper;
+use App\Helpers\DefaultRepositoryExceptionHandlerHelper;
 
 class DefaultRepository implements DefaultRepositoryInterface
 {
@@ -23,7 +23,7 @@ class DefaultRepository implements DefaultRepositoryInterface
      */
     public function all(): callable|Collection
     {
-        return DefaultRepositoryExceptionHelper::handleException(function () {
+        return DefaultRepositoryExceptionHandlerHelper::handleException(function () {
             return $this->model::all();
         }, 'notFound');
     }
@@ -36,7 +36,7 @@ class DefaultRepository implements DefaultRepositoryInterface
      */
     public function find(int|string $id): callable|Model
     {
-        return DefaultRepositoryExceptionHelper::handleException(function () use ($id) {
+        return DefaultRepositoryExceptionHandlerHelper::handleException(function () use ($id) {
             return $this->model::findOrFail($id);
         }, 'notFound');
     }
@@ -49,7 +49,7 @@ class DefaultRepository implements DefaultRepositoryInterface
      */
     public function create(FormRequest $data): callable|Model
     {
-        return DefaultRepositoryExceptionHelper::handleException(function () use ($data) {
+        return DefaultRepositoryExceptionHandlerHelper::handleException(function () use ($data) {
             return $this->model::create($data->validated());
         }, 'create');
     }
@@ -63,7 +63,7 @@ class DefaultRepository implements DefaultRepositoryInterface
      */
     public function update(int|string $id, FormRequest $data): callable|Model
     {
-        return DefaultRepositoryExceptionHelper::handleException(function () use ($id, $data) {
+        return DefaultRepositoryExceptionHandlerHelper::handleException(function () use ($id, $data) {
             $model = $this->find($id);
             $model->update($data->validated());
             return $model;
@@ -78,7 +78,7 @@ class DefaultRepository implements DefaultRepositoryInterface
      */
     public function delete(int|string $id): void
     {
-        DefaultRepositoryExceptionHelper::handleException(function () use ($id) {
+        DefaultRepositoryExceptionHandlerHelper::handleException(function () use ($id) {
             $model = $this->find($id);
 
             $model->delete();

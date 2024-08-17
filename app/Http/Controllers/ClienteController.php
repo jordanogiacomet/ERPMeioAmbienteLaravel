@@ -2,63 +2,109 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ClienteService;
+use App\DTOs\CreateClienteDTO;
+use App\DTOs\UpdateClienteDTO;
+use App\DTOs\ReadClienteDTO;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ClienteController extends Controller
 {
+    protected ClienteService $clienteService;
+
+    public function __construct(ClienteService $clienteService)
+    {
+        $this->clienteService = $clienteService;
+    }
+    
     /**
-     * Display a listing of the resource.
+     * index
+     *
+     * @return void
      */
     public function index()
     {
-        //
+        $clientes = $this->clienteService->getAllClientes();
+        return response()->json($clientes);
     }
-
+    
     /**
-     * Show the form for creating a new resource.
+     * show
+     *
+     * @param  mixed $id
+     * @return void
      */
-    public function create()
+    public function show($id)
     {
-        //
+        $cliente = $this->clienteService->getClienteById($id);
+        return response()->json($cliente);
     }
-
+    
     /**
-     * Store a newly created resource in storage.
+     * store
+     *
+     * @param  mixed $request
+     * @return void
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'cnpj' => 'required|string|max:14',
+            'endereco' => 'required|string|max:255',
+            'contato' => 'required|string|max:255',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $clienteDto = new CreateClienteDTO(
+            $request->input('nome'),
+            $request->input('cnpj'),
+            $request->input('endereco'),
+            $request->input('contato')
+        );
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $this->clienteService->createCliente($clienteDto);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        return response()->json(['message' => 'Cliente criado com sucesso'], Response::HTTP_CREATED);
     }
-
+    
     /**
-     * Remove the specified resource from storage.
+     * update
+     *
+     * @param  mixed $id
+     * @param  mixed $request
+     * @return void
      */
-    public function destroy(string $id)
+    public function update($id, Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'sometimes|required|string|max:255',
+            'cnpj' => 'sometimes|required|string|max:14',
+            'endereco' => 'sometimes|required|string|max:255',
+            'contato' => 'sometimes|required|string|max:255',
+        ]);
+
+        $clienteDto = new UpdateClienteDTO(
+            $request->input('nome', ''),
+            $request->input('cnpj', ''),
+            $request->input('endereco', ''),
+            $request->input('contato', '')
+        );
+
+        $cliente = $this->clienteService->updateCliente($id, $clienteDto);
+
+        return response()->json($cliente);
+    }
+    
+    /**
+     * destroy
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function destroy($id)
+    {
+        $this->clienteService->deleteCliente($id);
+        return response()->json(['message' => 'Cliente deletado com sucesso']);
     }
 }
