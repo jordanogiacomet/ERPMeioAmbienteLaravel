@@ -4,7 +4,8 @@ namespace App\Helpers;
 
 use Exception;
 
-abstract class ExceptionHelper {    
+abstract class ExceptionHelper
+{
     /**
      * handleException
      *
@@ -13,12 +14,13 @@ abstract class ExceptionHelper {
      * @throws Exception
      * @return callable
      */
-    private static function handleException(callable $function, string $exceptionClass)
+    public static function handleException(callable $function, string $exceptionKey)
     {
         try {
             return $function();
         } catch (Exception $e) {
-            throw new $exceptionClass($e->getMessage(), $e->getCode());
+            $exceptionClass = static::$exceptionMap[$exceptionKey] ?? Exception::class;
+            throw new $exceptionClass($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

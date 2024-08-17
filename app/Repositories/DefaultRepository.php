@@ -5,55 +5,55 @@ namespace App\Repositories;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
-use App\Helpers\ExceptionHelper;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use SebastianBergmann\Type\VoidType;
+use App\Helpers\DefaultRepositoryExceptionHelper;
 
-abstract class DefaultRepository implements DefaultRepositoryInterface
+class DefaultRepository implements DefaultRepositoryInterface
 {
     protected Model $model;
 
-    public function __construct(Model $model) 
+    public function __construct(Model $model)
     {
         $this->model = $model;
     }
-    
+
     /**
      * all
      *
      * @return Collection
      */
-    public function all(): Collection
+    public function all(): callable|Collection
     {
-        return ExceptionHelper::handleException(function () {
+        return DefaultRepositoryExceptionHelper::handleException(function () {
             return $this->model::all();
-        }, 'notFound')();
-    }    
+        }, 'notFound');
+    }
+
     /**
      * find
      *
-     * @param  mixed $id
+     * @param  int|string $id
      * @return Model
      */
-    public function find(int|string $id): ?Model
+    public function find(int|string $id): callable|Model
     {
-        return ExceptionHelper::handleException(function () use ($id) {
+        return DefaultRepositoryExceptionHelper::handleException(function () use ($id) {
             return $this->model::findOrFail($id);
-        }, 'notFound')();
-    }    
+        }, 'notFound');
+    }
+
     /**
      * create
      *
      * @param  FormRequest $data
      * @return Model
      */
-    public function create(FormRequest $data): Model
+    public function create(FormRequest $data): callable|Model
     {
-        return ExceptionHelper::handleException(function () use ($data) {
+        return DefaultRepositoryExceptionHelper::handleException(function () use ($data) {
             return $this->model::create($data->validated());
-        }, 'create')(); 
+        }, 'create');
     }
-    
+
     /**
      * update
      *
@@ -61,14 +61,15 @@ abstract class DefaultRepository implements DefaultRepositoryInterface
      * @param  FormRequest $data
      * @return Model
      */
-    public function update(int|string $id, FormRequest $data): Model
+    public function update(int|string $id, FormRequest $data): callable|Model
     {
-        return ExceptionHelper::handleException(function () use ($id, $data) {
+        return DefaultRepositoryExceptionHelper::handleException(function () use ($id, $data) {
             $model = $this->find($id);
             $model->update($data->validated());
             return $model;
-        }, 'update')();
-    }    
+        }, 'update');
+    }
+
     /**
      * delete
      *
@@ -77,8 +78,9 @@ abstract class DefaultRepository implements DefaultRepositoryInterface
      */
     public function delete(int|string $id): void
     {
-        ExceptionHelper::handleException(function () use ($id){
+        DefaultRepositoryExceptionHelper::handleException(function () use ($id) {
             $model = $this->find($id);
+
             $model->delete();
         }, 'delete');
     }
