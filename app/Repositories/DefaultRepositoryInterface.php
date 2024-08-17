@@ -10,7 +10,7 @@ interface DefaultRepositoryInterface
 {
     public function all(): callable|Collection;
     public function find(int|string $id): callable|Model;
-    public function create(FormRequest $data): callable|Model;
-    public function update(int|string $id, FormRequest $data): callable|Model;
+    public function create(array $data): callable|Model;
+    public function update(int|string $id, array $data): callable|Model;
     public function delete(int|string $id): void;
 }
