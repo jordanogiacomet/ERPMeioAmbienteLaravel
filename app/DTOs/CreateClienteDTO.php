@@ -15,4 +15,13 @@ class CreateClienteDTO
         $this->endereco = $endereco;
         $this->contato = $contato;
     }
+
+    public function toArray() {
+        return [
+            'nome' => $this->nome,
+            'cnpj' => $this->cnpj,
+            'endereco' => $this->endereco,
+            'contato' => $this->contato
+        ];
+    }
 }
