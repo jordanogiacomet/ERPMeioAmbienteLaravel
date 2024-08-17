@@ -2,12 +2,12 @@
 
 namespace App\Helpers;
 
-use App\Exceptions\ClienteNotFoundException;
-use App\Exceptions\ClienteCreateException;
-use App\Exceptions\ClienteUpdateException;
-use App\Exceptions\ClienteDeleteException;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\CreateException;
+use App\Exceptions\UpdateException;
+use App\Exceptions\DeleteException;
 
-class ClienteRepositoryExceptionHelpers extends ExceptionHelper{    
+class RepositoryExceptionHelpers extends ExceptionHelper{    
     /**
      * handleNotFound
      *
@@ -16,7 +16,7 @@ class ClienteRepositoryExceptionHelpers extends ExceptionHelper{
      */
     public static function handleNotFound(callable $function): callable
     {
-        return self::handleException($function, ClienteNotFoundException::class);
+        return self::handleException($function, NotFoundException::class);
     }    
     /**
      * handleCreate
@@ -26,7 +26,7 @@ class ClienteRepositoryExceptionHelpers extends ExceptionHelper{
      */
     public static function handleCreate(callable $function)
     {
-        return self::handleException($function, ClienteCreateException::class);
+        return self::handleException($function, CreateException::class);
     }    
     /**
      * handleUpdate
@@ -36,7 +36,7 @@ class ClienteRepositoryExceptionHelpers extends ExceptionHelper{
      */
     public static function handleUpdate(callable $function)
     {
-        return self::handleException($function, ClienteUpdateException::class);
+        return self::handleException($function, UpdateException::class);
     }    
     /**
      * handleDelete
@@ -46,6 +46,6 @@ class ClienteRepositoryExceptionHelpers extends ExceptionHelper{
      */
     public static function handleDelete(callable $function)
     {
-        return self::handleException($function, ClienteDeleteException::class);
+        return self::handleException($function, DeleteException::class);
     }
 }

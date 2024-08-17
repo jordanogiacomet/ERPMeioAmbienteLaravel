@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Exceptions\ModelNotFoundException;
+use App\Exceptions\NotFoundException;
 use App\Exceptions\CreateException;
 use App\Exceptions\UpdateException;
 use App\Exceptions\DeleteException;
@@ -10,7 +10,7 @@ use App\Exceptions\DeleteException;
 class DefaultRepositoryExceptionHelper extends ExceptionHelper
 {
     protected static $exceptionMap = [
-        'notFound' => ModelNotFoundException::class,
+        'notFound' => NotFoundException::class,
         'create' => CreateException::class,
         'update' => UpdateException::class,
         'delete' => DeleteException::class,

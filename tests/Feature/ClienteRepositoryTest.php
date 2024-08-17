@@ -17,7 +17,7 @@ class ClienteRepositoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->clienteRepository = new ClienteRepository();
+        $this->clienteRepository = new ClienteRepository(new Cliente());
     }
 
     public function test_can_create_cliente()
@@ -29,7 +29,7 @@ class ClienteRepositoryTest extends TestCase
             'contato' => '123456789'
         ];
 
-        $cliente = $this->clienteRepository->create($data);
+        $cliente = $this->clienteRepository->create(new \Illuminate\Foundation\Http\FormRequest($data));
         $this->assertInstanceOf(Cliente::class, $cliente);
         $this->assertEquals($data['nome'], $cliente->nome);
     }
@@ -54,7 +54,7 @@ class ClienteRepositoryTest extends TestCase
         $data = [
             'nome' => 'Cliente Atualizado'
         ];
-        $updatedCliente = $this->clienteRepository->update($cliente->id, $data);
+        $updatedCliente = $this->clienteRepository->update($cliente->id, new \Illuminate\Foundation\Http\FormRequest($data));
         $this->assertEquals('Cliente Atualizado', $updatedCliente->nome);
     }
 
